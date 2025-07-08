@@ -111,15 +111,15 @@ class BuraqManagerWindow(QMainWindow):
 
         # Task Table
         self.task_table = QTableWidget()
-        self.task_table.setColumnCount(7)
-        self.task_table.setHorizontalHeaderLabels(["ID", "Category", "Name", "Detail", "Priority", "Assignee", "Actions"])
+        self.task_table.setColumnCount(8)  # Changed from 7 to 8 to accommodate Actions column
+        self.task_table.setHorizontalHeaderLabels(["ID", "Category", "Name", "Detail", "Priority", "Assignee", "Edit", "Delete"])
         self.task_table.horizontalHeader().setStretchLastSection(True)
         self.main_layout.addWidget(self.task_table)
 
         # Subtask Table
         self.subtask_table = QTableWidget()
-        self.subtask_table.setColumnCount(6)
-        self.subtask_table.setHorizontalHeaderLabels(["ID", "Task ID", "Name", "Detail", "Completed", "Actions"])
+        self.subtask_table.setColumnCount(7)  # Changed from 6 to 7 to accommodate Actions columns
+        self.subtask_table.setHorizontalHeaderLabels(["ID", "Task ID", "Name", "Detail", "Completed", "Edit", "Delete"])
         self.subtask_table.horizontalHeader().setStretchLastSection(True)
         self.main_layout.addWidget(self.subtask_table)
 

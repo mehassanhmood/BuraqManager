@@ -200,3 +200,4 @@ auth_config.*
 # Example:
 # my_database.db
 # custom_config.py
+CHANGES_BuraqManager.md
