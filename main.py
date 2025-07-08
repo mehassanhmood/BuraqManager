@@ -3,6 +3,25 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout,
 from PyQt6.QtCore import Qt
 from backend import Priority, get_tasks, create_task, get_task, update_task, delete_task, create_subtask, update_subtask, delete_subtask, get_db, Task, Subtask
 
+import requests
+import json
+import os
+import shutil
+
+
+def check_for_updates(current_version="0.1.0"):
+    response = requests.get("https://api.github.com/repos/your-username/my-desktop-app/releases/latest")
+    latest_version = response.json()["tag_name"].lstrip("v")
+    if latest_version > current_version:
+        print(f"New version {latest_version} available!")
+        for asset in response.json()["assets"]:
+            url = asset["browser_download_url"]
+            if url.endswith(".exe") or url.endswith("MyDesktopApp"):
+                print(f"Downloading {url}...")
+                # Download and replace executable
+                # Download data.db if updated
+                # Example: shutil.copy for database update
+
 class BuraqManagerWindow(QMainWindow):
     def __init__(self):
         super().__init__()
