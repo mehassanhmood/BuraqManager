@@ -9,18 +9,30 @@ import os
 import shutil
 
 
+import requests
+import subprocess
+import sys
+
 def check_for_updates(current_version="0.1.0"):
-    response = requests.get("https://api.github.com/repos/your-username/my-desktop-app/releases/latest")
-    latest_version = response.json()["tag_name"].lstrip("v")
-    if latest_version > current_version:
-        print(f"New version {latest_version} available!")
-        for asset in response.json()["assets"]:
-            url = asset["browser_download_url"]
-            if url.endswith(".exe") or url.endswith("MyDesktopApp"):
-                print(f"Downloading {url}...")
-                # Download and replace executable
-                # Download data.db if updated
-                # Example: shutil.copy for database update
+    try:
+        response = requests.get("https://api.github.com/repos/your-username/buraqmanager/releases/latest")
+        latest_version = response.json()["tag_name"].lstrip("v")
+        if latest_version > current_version:
+            print(f"New version {latest_version} available!")
+            for asset in response.json()["assets"]:
+                url = asset["browser_download_url"]
+                if url.endswith(".exe") or url.endswith("BuraqManager"):
+                    new_exe = "BuraqManager_new"
+                    subprocess.run(["curl", "-L", url, "-o", new_exe])
+                    # Platform-specific: replace and restart
+                    if sys.platform == "linux":
+                        subprocess.run(["chmod", "+x", new_exe])
+                        subprocess.run([f"./{new_exe}"])
+                    elif sys.platform == "win32":
+                        subprocess.run([new_exe])
+                    sys.exit()
+    except Exception as e:
+        print(f"Update check failed: {e}")
 
 class BuraqManagerWindow(QMainWindow):
     def __init__(self):
@@ -227,6 +239,7 @@ class BuraqManagerWindow(QMainWindow):
         self.task_id_input.clear()
 
 if __name__ == "__main__":
+    check_for_updates()
     app = QApplication(sys.argv)
     window = BuraqManagerWindow()
     window.show()
