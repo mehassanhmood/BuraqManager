@@ -1,1 +1,202 @@
 **/*dev*
+*dev*
+
+
+# Python SQLite .gitignore
+# Optimized for Python projects using SQLite databases
+
+# =============================================================================
+# SQLITE DATABASES
+# =============================================================================
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.s3db
+*.sl3
+
+# Database backups and dumps
+*.sql
+*.dump
+*.backup
+*.bak
+
+# =============================================================================
+# PYTHON
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# =============================================================================
+# DEVELOPMENT & ENVIRONMENT
+# =============================================================================
+
+# Development files
+*dev*
+*.dev
+.dev
+dev/
+
+# Environment files
+.env
+.env.*
+.environment
+*.env
+
+# Configuration files with sensitive data
+config.py
+settings.py
+secrets.py
+database_config.py
+
+# =============================================================================
+# LOGS & DEBUGGING
+# =============================================================================
+
+# Log files
+*.log
+*.log.*
+logs/
+log/
+
+# Debug files
+*.debug
+*.trace
+
+# =============================================================================
+# EDITORS & IDEs
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# OPERATING SYSTEMS
+# =============================================================================
+
+# Windows
+Thumbs.db
+*.stackdump
+[Dd]esktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# =============================================================================
+# BACKUP & TEMPORARY
+# =============================================================================
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# =============================================================================
+# SECURITY & SECRETS
+# =============================================================================
+
+# API Keys and secrets
+*.pem
+*.key
+secrets.json
+secrets.yml
+api_keys.*
+credentials.*
+auth_config.*
+
+# =============================================================================
+# CUSTOM PATTERNS
+# =============================================================================
+
+# Add your project-specific ignores here
+# Example:
+# my_database.db
+# custom_config.py
