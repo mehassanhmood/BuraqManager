@@ -44,11 +44,55 @@ jobs:
         run: |
           poetry run pyinstaller --name BuraqManager --onefile --add-data "buraqmanager.db${{ matrix.os == 'windows-latest' && ';' || ':' }}." main.py
 
+      - name: Build installer package
+        run: |
+          poetry run pyinstaller --name BuraqManager --onedir --add-data "buraqmanager.db${{ matrix.os == 'windows-latest' && ';' || ':' }}." main.py
+        if: matrix.os == 'windows-latest'
+
+      - name: Create Windows Installer
+        run: |
+          # Install NSIS for creating Windows installer
+          choco install nsis -y
+          # Create installer script
+          echo '!include "MUI2.nsh"' > installer.nsi
+          echo 'Name "BuraqManager"' >> installer.nsi
+          echo 'OutFile "BuraqManager-Setup.exe"' >> installer.nsi
+          echo 'InstallDir "$PROGRAMFILES\BuraqManager"' >> installer.nsi
+          echo 'RequestExecutionLevel admin' >> installer.nsi
+          echo '!insertmacro MUI_PAGE_WELCOME' >> installer.nsi
+          echo '!insertmacro MUI_PAGE_DIRECTORY' >> installer.nsi
+          echo '!insertmacro MUI_PAGE_INSTFILES' >> installer.nsi
+          echo '!insertmacro MUI_PAGE_FINISH' >> installer.nsi
+          echo '!insertmacro MUI_LANGUAGE "English"' >> installer.nsi
+          echo 'Section "Install"' >> installer.nsi
+          echo '  SetOutPath "$INSTDIR"' >> installer.nsi
+          echo '  File /r "dist\BuraqManager\*.*"' >> installer.nsi
+          echo '  WriteUninstaller "$INSTDIR\Uninstall.exe"' >> installer.nsi
+          echo '  CreateDirectory "$SMPROGRAMS\BuraqManager"' >> installer.nsi
+          echo '  CreateShortCut "$SMPROGRAMS\BuraqManager\BuraqManager.lnk" "$INSTDIR\BuraqManager.exe"' >> installer.nsi
+          echo '  CreateShortCut "$DESKTOP\BuraqManager.lnk" "$INSTDIR\BuraqManager.exe"' >> installer.nsi
+          echo '  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BuraqManager" "DisplayName" "BuraqManager"' >> installer.nsi
+          echo '  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BuraqManager" "UninstallString" "$INSTDIR\Uninstall.exe"' >> installer.nsi
+          echo 'SectionEnd' >> installer.nsi
+          echo 'Section "Uninstall"' >> installer.nsi
+          echo '  Delete "$INSTDIR\BuraqManager.exe"' >> installer.nsi
+          echo '  RMDir /r "$INSTDIR"' >> installer.nsi
+          echo '  Delete "$SMPROGRAMS\BuraqManager\BuraqManager.lnk"' >> installer.nsi
+          echo '  RMDir "$SMPROGRAMS\BuraqManager"' >> installer.nsi
+          echo '  Delete "$DESKTOP\BuraqManager.lnk"' >> installer.nsi
+          echo '  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BuraqManager"' >> installer.nsi
+          echo 'SectionEnd' >> installer.nsi
+          # Build the installer
+          makensis installer.nsi
+        if: matrix.os == 'windows-latest'
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: BuraqManager-${{ matrix.os }}
-          path: dist/BuraqManager*
+          path: |
+            dist/BuraqManager*
+            BuraqManager-Setup.exe
 
   release:
     needs: build
@@ -68,6 +112,7 @@ jobs:
         with:
           files: |
             artifacts/**/BuraqManager*
+            artifacts/**/BuraqManager-Setup.exe
           draft: false
           prerelease: false
           fail_on_unmatched_files: false
