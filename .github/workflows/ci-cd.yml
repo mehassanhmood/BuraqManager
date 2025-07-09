@@ -67,10 +67,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/BuraqManager-ubuntu-latest/BuraqManager
-            artifacts/BuraqManager-windows-latest/BuraqManager.exe
-            artifacts/BuraqManager-macos-latest/BuraqManager
+            artifacts/**/BuraqManager*
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
