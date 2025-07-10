@@ -29,6 +29,6 @@ jobs:
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ./BuraqManager.exe
+          files: ./main.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
