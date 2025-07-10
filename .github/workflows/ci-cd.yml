@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   build:
     runs-on: windows-latest
@@ -27,7 +31,7 @@ jobs:
 
       - name: Build executable
         run: |
-          poetry run pyinstaller --name BuraqManager --noconsole main.py
+          poetry run pyinstaller --name BuraqManager --noconsole --add-data "buraqmanager.db;." main.py
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
@@ -35,5 +39,6 @@ jobs:
           files: dist/BuraqManager.exe
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
