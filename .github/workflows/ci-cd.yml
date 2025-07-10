@@ -14,21 +14,53 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          
       - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
           pip install poetry
+          
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
+        
       - name: Build executable
-        run: poetry run pyinstaller --onefile --noconsole main.py
-      - name: Upload to Release
+        run: |
+          poetry run pyinstaller --onefile --noconsole --name BuraqManager main.py
+          echo "Build completed. Checking output..."
+          if (Test-Path "dist/BuraqManager.exe") {
+            echo "✅ Build successful: BuraqManager.exe created"
+            echo "File size: $((Get-Item 'dist/BuraqManager.exe').Length / 1MB) MB"
+          } else {
+            echo "❌ Build failed: No executable found"
+            echo "Contents of dist folder:"
+            Get-ChildItem -Path "dist" -Force
+            exit 1
+          }
+          
+      - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: ./main.exe
+          files: ./dist/BuraqManager.exe
+          name: BuraqManager ${{ github.ref_name }}
+          body: |
+            ## BuraqManager ${{ github.ref_name }}
+            
+            **Download the executable**: `BuraqManager.exe`
+            
+            **Note**: GitHub automatically includes source code archives. You only need the `.exe` file to run the application.
+            
+            ### Installation
+            1. Download `BuraqManager.exe`
+            2. Run the executable
+            
+            ### Changes
+            See commit history for detailed changes.
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
